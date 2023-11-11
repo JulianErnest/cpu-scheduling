@@ -91,6 +91,13 @@ function App() {
 
       const newTableData = tableData.map((row) => ({ ...row, priority: 0 }));
       setTableData(newTableData);
+    } else {
+      const newTableData = tableData.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ({ priority, ...keepAttrs }) => keepAttrs
+      );
+      console.log(newTableData);
+      setTableData(newTableData);
     }
   }, [selectedAlgorithm]);
 
@@ -137,8 +144,8 @@ function App() {
                     <th>Process ID</th>
                     <th>Arrival Time</th>
                     <th>Burst Time</th>
-                    {selectedAlgorithm === "prty" ||
-                      (selectedAlgorithm === "n-prty" && <th>Priority</th>)}
+                    {(selectedAlgorithm === "prty" ||
+                      selectedAlgorithm === "n-prty") && <th>Priority</th>}
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -163,16 +170,20 @@ function App() {
                           }
                         />
                       </td>
-                      <td>
-                        <input
-                          className="text-center"
-                          type="text"
-                          value={row.burstTime}
-                          onChange={(e) =>
-                            handleBurstTimeChange(row.id, e.target.value)
-                          }
-                        />
-                      </td>
+                      {(selectedAlgorithm === "n-prty" ||
+                        selectedAlgorithm === "prty") && (
+                        <td>
+                          <input
+                            className="text-center"
+                            type="text"
+                            value={row.burstTime}
+                            onChange={(e) =>
+                              handleBurstTimeChange(row.id, e.target.value)
+                            }
+                          />
+                        </td>
+                      )}
+
                       <td>
                         <input
                           className="text-center"
@@ -218,8 +229,8 @@ function App() {
               <tr className="bg-[#4CAF50] text-white">
                 <th className="py-2 px-4">Job</th>
                 <th className="py-2 px-4">Arrival Time</th>
-                {selectedAlgorithm === "prty" ||
-                  (selectedAlgorithm === "n-prty" && <th>Priority</th>)}
+                {(selectedAlgorithm === "prty" ||
+                  selectedAlgorithm === "n-prty") && <th>Priority</th>}
                 <th className="py-2 px-4">Burst Time</th>
                 <th className="py-2 px-4">End Time</th>
                 <th className="py-2 px-4">Turnaround Time</th>

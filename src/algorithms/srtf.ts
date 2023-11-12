@@ -1,7 +1,6 @@
 import { AlgorithmResultData, ChartData, TableData } from "../types";
 
-const srtfAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
-  // Sort the processes based on arrival time
+const preemptivePriorityAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
   const sortedTableData = [...tableData].sort(
     (a, b) => +a.arrivalTime - +b.arrivalTime
   );
@@ -20,21 +19,18 @@ const srtfAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
     currentTime = +sortedTableData[0].arrivalTime;
   }
 
-  const srtfResult: AlgorithmResultData[] = [];
+  const priorityResult: AlgorithmResultData[] = [];
 
   while (sortedTableData.length > 0) {
-    // Find the process with the shortest remaining time
-    let shortestRemainingTime = Infinity;
+    let highestPriority = Infinity;
     let selectedProcessIndex = -1;
 
     for (let i = 0; i < sortedTableData.length; i++) {
       const process = sortedTableData[i];
 
       if (+process.arrivalTime <= currentTime) {
-        const remainingTime = +process.burstTime - process.executionTime || +process.burstTime;
-
-        if (remainingTime < shortestRemainingTime) {
-          shortestRemainingTime = remainingTime;
+        if (process.priority < highestPriority) {
+          highestPriority = process.priority;
           selectedProcessIndex = i;
         }
       }
@@ -46,19 +42,15 @@ const srtfAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
     }
 
     const selectedProcess = sortedTableData[selectedProcessIndex];
-    if (!selectedProcess.executionTime) {
-      selectedProcess.executionTime = 0;
-    }
 
-    currentTime++;
-    selectedProcess.executionTime++;
+    const remainingTime = +selectedProcess.burstTime - selectedProcess.executionTime || +selectedProcess.burstTime;
 
-    const endTime = currentTime;
+    const endTime = currentTime + 1;
     const turnaroundTime = endTime - +selectedProcess.arrivalTime;
     const waitingTime = turnaroundTime - +selectedProcess.burstTime;
 
     chartData.push({
-      start: currentTime - selectedProcess.executionTime,
+      start: currentTime,
       end: endTime,
       id: selectedProcess.id,
     });
@@ -66,8 +58,12 @@ const srtfAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
     totalTurnaroundTime += turnaroundTime;
     totalWaitingTime += waitingTime;
 
+    currentTime++;
+
+    selectedProcess.executionTime++;
+
     if (selectedProcess.executionTime === +selectedProcess.burstTime) {
-      srtfResult.push({
+      priorityResult.push({
         ...selectedProcess,
         endTime,
         turnaroundTime,
@@ -82,7 +78,7 @@ const srtfAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
   const averageWaitingTime = totalWaitingTime / tableData.length;
 
   return {
-    algorithmResult: srtfResult,
+    algorithmResult: priorityResult,
     averageTime: {
       turnaroundTime: averageTurnaroundTime,
       waitingTime: averageWaitingTime,
@@ -91,4 +87,4 @@ const srtfAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
   };
 };
 
-export default srtfAlgorithm;
+export default preemptivePriorityAlgorithm;

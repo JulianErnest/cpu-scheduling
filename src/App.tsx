@@ -18,17 +18,9 @@ const SchedulingAlgorithms = [
 
 function App() {
   const [tableData, setTableData] = useState<TableData[]>([
-    { id: "P1", arrivalTime: "1", burstTime: "80" },
-    { id: "P2", arrivalTime: "2", burstTime: "10" },
-    { id: "P3", arrivalTime: "3", burstTime: "50" },
-    { id: "P4", arrivalTime: "4", burstTime: "50" },
-    { id: "P5", arrivalTime: "5", burstTime: "50" },
-
-    { id: "P6", arrivalTime: "6", burstTime: "50" },
-
-    { id: "P7", arrivalTime: "7", burstTime: "50" },
-
-    // Add more initial rows as needed
+    { id: "P1", arrivalTime: "", burstTime: "" },
+    { id: "P2", arrivalTime: "", burstTime: "" },
+    { id: "P3", arrivalTime: "", burstTime: "" },
   ]);
   const [resultData, setResultData] = useState<AlgorithmResultData>({
     algorithmResult: [],
@@ -67,6 +59,7 @@ function App() {
   const handleBurstTimeChange = (id: number | string, value: string) => {
     const updatedData = [...tableData];
     const targetRow = updatedData.find((item) => item.id === id);
+    console.log(targetRow)
     if (targetRow) {
       targetRow.burstTime = value;
       setTableData(updatedData);
@@ -74,6 +67,7 @@ function App() {
   };
 
   const solve = () => {
+    console.log(tableData);
     switch (selectedAlgorithm) {
       case "fcfs":
         setResultData(fcfsAlgorithm(tableData));
@@ -191,9 +185,9 @@ function App() {
                           <input
                             className="text-center"
                             type="text"
-                            value={row.burstTime}
+                            value={row.priority}
                             onChange={(e) =>
-                              handleBurstTimeChange(row.id, e.target.value)
+                              handlePriorityChange(row.id, +e.target.value)
                             }
                           />
                         </td>
@@ -205,7 +199,7 @@ function App() {
                           type="text"
                           value={row.priority}
                           onChange={(e) =>
-                            handlePriorityChange(row.id, +e.target.value)
+                            handleBurstTimeChange(row.id, e.target.value)
                           }
                         />
                       </td>
@@ -285,13 +279,13 @@ function App() {
                 }}
               >
                 <h3>{operation.id}</h3>
-                {index === 0 && (
-                  <h2 className="absolute -left-1 -bottom-6 text-xl">
-                    {operation.start}
+                {index === resultData.ganttChartData.length - 1 && (
+                  <h2 className="absolute -right-2 -bottom-6 text-xl">
+                    {operation.end}
                   </h2>
                 )}
-                <h2 className="absolute -right-2 -bottom-6 text-xl">
-                  {operation.end}
+                <h2 className="absolute -left-1 -bottom-6 text-xl">
+                  {operation.start}
                 </h2>
               </div>
             ))}

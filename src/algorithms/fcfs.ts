@@ -1,4 +1,4 @@
-import { AlgorithmResultData, TableData } from "../types";
+import { AlgorithmResultData, ChartData, TableData } from "../types";
 
 const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
   // Sort the processes based on arrival time
@@ -6,11 +6,20 @@ const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
   const sortedTableData = [...tableData].sort(
     (a, b) => +a.arrivalTime - +b.arrivalTime
   );
+  const chartData: ChartData[] = [];
 
   let currentTime = 0;
   let endTime = 0;
   let totalTurnaroundTime = 0;
   let totalWaitingTime = 0;
+
+  if (currentTime !== +sortedTableData[0].arrivalTime) {
+    chartData.push({
+      start: 0,
+      end: +sortedTableData[0].arrivalTime,
+      id: '-'
+    })
+  }
 
   const fcfsResult = sortedTableData.map((process) => {
     if (currentTime < +process.arrivalTime) {
@@ -20,6 +29,12 @@ const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
     endTime = currentTime + +process.burstTime;
     const turnaroundTime = endTime - +process.arrivalTime;
     const waitingTime = turnaroundTime - +process.burstTime;
+
+    chartData.push({
+      start: currentTime,
+      end: endTime,
+      id: process.id,
+    })
 
     totalTurnaroundTime += turnaroundTime;
     totalWaitingTime += waitingTime;
@@ -43,6 +58,7 @@ const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
         turnaroundTime: averageTurnaroundTime,
         waitingTime: averageWaitingTime,
     },
+    ganttChartData: chartData,
   }
 };
 

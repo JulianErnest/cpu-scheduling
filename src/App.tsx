@@ -59,7 +59,7 @@ function App() {
   const handleBurstTimeChange = (id: number | string, value: string) => {
     const updatedData = [...tableData];
     const targetRow = updatedData.find((item) => item.id === id);
-    console.log(targetRow)
+    console.log(targetRow);
     if (targetRow) {
       targetRow.burstTime = value;
       setTableData(updatedData);
@@ -109,6 +109,8 @@ function App() {
       setTableData(newTableData);
     }
   }, [selectedAlgorithm]);
+
+  console.log(resultData)
 
   return (
     <>
@@ -197,7 +199,7 @@ function App() {
                         <input
                           className="text-center"
                           type="text"
-                          value={row.priority}
+                          value={row.burstTime}
                           onChange={(e) =>
                             handleBurstTimeChange(row.id, e.target.value)
                           }
@@ -269,26 +271,37 @@ function App() {
             <h2 className="text-3xl font-semibold my-8">Gantt Chart</h2>
           )}
           <div className="flex flex-row flex-wrap gap-y-8">
-            {resultData.ganttChartData.map((operation, index) => (
-              <div
-                className="relative flex items-center justify-center h-8 bg-[#4CAF50] border-solid border-2"
-                style={{
-                  width: `${
-                    Math.max(80, (operation.end - operation.start) * 15) 
-                  }px`,
-                }}
-              >
-                <h3>{operation.id}</h3>
-                {index === resultData.ganttChartData.length - 1 && (
-                  <h2 className="absolute -right-2 -bottom-6 text-xl">
-                    {operation.end}
+            {resultData.ganttChartData.map((operation, index, array) => {
+              const isLastOperation = index === array.length - 1;
+              const nextOperation = array[index + 1];
+              const isSameIdAsNext =
+                nextOperation && operation.id === nextOperation.id;
+
+              return (
+                <div
+                  key={index}
+                  className={`relative flex items-center justify-center h-8 bg-[#4CAF50] border-solid border-2 ${
+                    isSameIdAsNext ? "rounded-l-none" : "rounded-l-md"
+                  }`}
+                  style={{
+                    width: `${Math.max(
+                      80,
+                      (operation.end - operation.start) * 15
+                    )}px`,
+                  }}
+                >
+                  <h3>{operation.id}</h3>
+                  {isLastOperation && (
+                    <h2 className="absolute -right-2 -bottom-6 text-xl">
+                      {operation.end}
+                    </h2>
+                  )}
+                  <h2 className="absolute -left-1 -bottom-6 text-xl">
+                    {operation.start}
                   </h2>
-                )}
-                <h2 className="absolute -left-1 -bottom-6 text-xl">
-                  {operation.start}
-                </h2>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

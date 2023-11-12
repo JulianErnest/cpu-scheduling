@@ -22,13 +22,9 @@ const SchedulingAlgorithms = [
 
 function App() {
   const [tableData, setTableData] = useState<TableData[]>([
-    // { id: "P1", arrivalTime: "", burstTime: "" },
-    // { id: "P2", arrivalTime: "", burstTime: "" },
-    // { id: "P3", arrivalTime: "", burstTime: "" },
-    { id: 1, arrivalTime: "0", burstTime: "4"},
-    { id: 2, arrivalTime: "1", burstTime: "3"},
-    { id: 3, arrivalTime: "2", burstTime: "5"},
-    { id: 4, arrivalTime: "3", burstTime: "2"},
+    { id: "P1", arrivalTime: "", burstTime: "" },
+    { id: "P2", arrivalTime: "", burstTime: "" },
+    { id: "P3", arrivalTime: "", burstTime: "" },
   ]);
   const [resultData, setResultData] = useState<AlgorithmResultData>({
     algorithmResult: [],
@@ -171,6 +167,7 @@ function App() {
                     <th>Burst Time</th>
                     {(selectedAlgorithm === "prty" ||
                       selectedAlgorithm === "n-prty") && <th>Priority</th>}
+                    {}
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -284,6 +281,11 @@ function App() {
               ))}
             </tbody>
           </table>
+          <h2 className="text-3xl font-semibold my-6">Average Turnaround Time</h2>
+              {resultData.averageTime.waitingTime}
+          <h2 className="text-3xl font-semibold my-6">Average Waiting Time</h2>
+              {resultData.averageTime.waitingTime}
+
           {resultData.ganttChartData.length > 0 && (
             <h2 className="text-3xl font-semibold my-8">Gantt Chart</h2>
           )}

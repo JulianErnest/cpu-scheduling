@@ -274,7 +274,7 @@ function App() {
                 className="relative flex items-center justify-center h-8 bg-[#4CAF50] border-solid border-2"
                 style={{
                   width: `${
-                    Math.max(20, operation.end - operation.start) * 5
+                    Math.max(80, (operation.end - operation.start) * 15) 
                   }px`,
                 }}
               >

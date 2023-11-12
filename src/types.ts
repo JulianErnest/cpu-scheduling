@@ -3,7 +3,8 @@ export type TableData = {
   arrivalTime: string;
   burstTime: string;
   timeQuantum?: number;
-  priority?: number;
+  priority?: number| string;
+  executionTime?: number;
 };
 export type AlgorithmResult = {
   endTime: number;
@@ -11,7 +12,8 @@ export type AlgorithmResult = {
   waitingTime: number;
   id: number | string;
   arrivalTime: string;
-  burstTime: string;
+  burstTime: string | number;
+  priority?: string | number;
 };
 export type AlgorithmResultData = {
   algorithmResult: AlgorithmResult[];
@@ -19,6 +21,7 @@ export type AlgorithmResultData = {
     turnaroundTime: number;
     waitingTime: number;
   };
+  endTime?: number;
   ganttChartData: ChartData[];
 };
 

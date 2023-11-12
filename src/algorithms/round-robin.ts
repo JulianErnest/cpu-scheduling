@@ -1,7 +1,6 @@
 import { AlgorithmResultData, ChartData, TableData } from "../types";
 
 const roundRobinAlgorithm = (tableData: TableData[], timeQuantum: number): AlgorithmResultData => {
-  // Initialize executionTime to 0 for each row at the start
   const initializedTableData = tableData.map(row => ({ ...row, executionTime: 0 }));
 
   const chartData: ChartData[] = [];
@@ -17,7 +16,6 @@ const roundRobinAlgorithm = (tableData: TableData[], timeQuantum: number): Algor
 
     if (!currentProcess) {
       currentTime++;
-      console.log("Queue is empty. Current time:", currentTime);
       continue;
     }
 
@@ -26,7 +24,7 @@ const roundRobinAlgorithm = (tableData: TableData[], timeQuantum: number): Algor
 
     const endTime = currentTime + executeTime;
     const turnaroundTime = endTime - +currentProcess.arrivalTime;
-    const waitingTime = turnaroundTime - +currentProcess.burstTime;
+    const waitingTime = Math.max(0, currentTime - +currentProcess.arrivalTime); // Updated waiting time calculation
 
     chartData.push({
       start: currentTime,
@@ -55,7 +53,6 @@ const roundRobinAlgorithm = (tableData: TableData[], timeQuantum: number): Algor
     }
   }
 
-  console.log(chartData);
   const averageTurnaroundTime = totalTurnaroundTime / tableData.length;
   const averageWaitingTime = totalWaitingTime / tableData.length;
 

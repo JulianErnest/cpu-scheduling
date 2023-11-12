@@ -1,7 +1,10 @@
 import { AlgorithmResultData, ChartData, TableData } from "../types";
 
 const preemptivePriorityAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
-  const sortedTableData = [...tableData].sort(
+  const initializedTableData = tableData.map(row => ({ ...row, executionTime: 0 }));
+
+  console.log(initializedTableData);
+  const sortedTableData = [...initializedTableData].sort(
     (a, b) => +a.arrivalTime - +b.arrivalTime
   );
   const chartData: ChartData[] = [];
@@ -29,8 +32,8 @@ const preemptivePriorityAlgorithm = (tableData: TableData[]): AlgorithmResultDat
       const process = sortedTableData[i];
 
       if (+process.arrivalTime <= currentTime) {
-        if (process.priority < highestPriority) {
-          highestPriority = process.priority;
+        if (+process.priority < highestPriority) {
+          highestPriority = +process.priority;
           selectedProcessIndex = i;
         }
       }

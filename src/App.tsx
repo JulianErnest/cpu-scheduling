@@ -22,9 +22,9 @@ const SchedulingAlgorithms = [
 
 function App() {
   const [tableData, setTableData] = useState<TableData[]>([
-    { id: "P1", arrivalTime: "", burstTime: "" },
-    { id: "P2", arrivalTime: "", burstTime: "" },
-    { id: "P3", arrivalTime: "", burstTime: "" },
+    { id: 1, arrivalTime: "3", burstTime: "3"},
+    { id: 2, arrivalTime: "6", burstTime: "3"},
+    { id: 3, arrivalTime: "4", burstTime: "2"},
   ]);
   const [resultData, setResultData] = useState<AlgorithmResultData>({
     algorithmResult: [],
@@ -89,7 +89,7 @@ function App() {
         setResultData(nonPreemptivePriorityAlgorithm(tableData));
         break;
       case "round-robin":
-        setResultData(roundRobinAlgorithm(tableData, 3));
+        setResultData(roundRobinAlgorithm(tableData, timeQuantum));
         break;
       default:
         console.error("Unknown algorithm");

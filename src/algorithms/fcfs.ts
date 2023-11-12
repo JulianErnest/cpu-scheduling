@@ -2,8 +2,9 @@ import { AlgorithmResultData, ChartData, TableData } from "../types";
 
 const fcfsAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
   // Sort the processes based on arrival time
+  const initializedTableData = tableData.map(row => ({ ...row, executionTime: 0 }));
 
-  const sortedTableData = [...tableData].sort(
+  const sortedTableData = [...initializedTableData].sort(
     (a, b) => +a.arrivalTime - +b.arrivalTime
   );
   const chartData: ChartData[] = [];

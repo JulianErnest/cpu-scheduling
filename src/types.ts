@@ -19,4 +19,11 @@ export type AlgorithmResultData = {
     turnaroundTime: number;
     waitingTime: number;
   };
+  ganttChartData: ChartData[];
 };
+
+export type ChartData = {
+  id: number | string;
+  start: number;
+  end: number;
+}

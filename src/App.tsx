@@ -16,9 +16,16 @@ const SchedulingAlgorithms = [
 
 function App() {
   const [tableData, setTableData] = useState<TableData[]>([
-    { id: "P1", arrivalTime: "", burstTime: "" },
-    { id: "P2", arrivalTime: "", burstTime: "" },
-    { id: "P3", arrivalTime: "", burstTime: "" },
+    { id: "P1", arrivalTime: "1", burstTime: "80" },
+    { id: "P2", arrivalTime: "2", burstTime: "10" },
+    { id: "P3", arrivalTime: "3", burstTime: "50" },
+    { id: "P4", arrivalTime: "4", burstTime: "50" },
+    { id: "P5", arrivalTime: "5", burstTime: "50" },
+
+    { id: "P6", arrivalTime: "6", burstTime: "50" },
+
+    { id: "P7", arrivalTime: "7", burstTime: "50" },
+
     // Add more initial rows as needed
   ]);
   const [resultData, setResultData] = useState<AlgorithmResultData>({
@@ -27,6 +34,7 @@ function App() {
       turnaroundTime: 0,
       waitingTime: 0,
     },
+    ganttChartData: [],
   });
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("fcfs");
   const [timeQuantum, setTimeQuantum] = useState(0);
@@ -256,6 +264,31 @@ function App() {
               ))}
             </tbody>
           </table>
+          {resultData.ganttChartData.length > 0 && (
+            <h2 className="text-3xl font-semibold my-8">Gantt Chart</h2>
+          )}
+          <div className="flex flex-row flex-wrap gap-y-8">
+            {resultData.ganttChartData.map((operation, index) => (
+              <div
+                className="relative flex items-center justify-center h-8 bg-[#4CAF50] border-solid border-2"
+                style={{
+                  width: `${
+                    Math.max(20, operation.end - operation.start) * 5
+                  }px`,
+                }}
+              >
+                <h3>{operation.id}</h3>
+                {index === 0 && (
+                  <h2 className="absolute -left-1 -bottom-6 text-xl">
+                    {operation.start}
+                  </h2>
+                )}
+                <h2 className="absolute -right-2 -bottom-6 text-xl">
+                  {operation.end}
+                </h2>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

@@ -33,7 +33,7 @@ function App() {
 
   const addRow = () => {
     const newRow = {
-      id: tableData.length + 1,
+      id: "P" + (tableData.length + 1),
       arrivalTime: "",
       burstTime: "",
     } as TableData;

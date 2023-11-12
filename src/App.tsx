@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import fcfsAlgorithm from "./algorithms/fcfs";
 import { AlgorithmResultData, TableData } from "./types";
+import sjfAlgorithm from "./algorithms/sjf";
+import srtfAlgorithm from "./algorithms/srtf";
 
 const SchedulingAlgorithms = [
   { label: "First Come First Serve", value: "fcfs" },
@@ -41,7 +43,7 @@ function App() {
 
   const addRow = () => {
     const newRow = {
-      id: tableData.length + 1,
+      id: "P" + (tableData.length + 1),
       arrivalTime: "",
       burstTime: "",
     } as TableData;
@@ -77,7 +79,12 @@ function App() {
         setResultData(fcfsAlgorithm(tableData));
         break;
       // Add cases for other algorithms
-
+      case "sjf":
+        setResultData(sjfAlgorithm(tableData));
+        break;
+      case "srtf":
+        setResultData(srtfAlgorithm(tableData));
+        break;
       default:
         console.error("Unknown algorithm");
     }

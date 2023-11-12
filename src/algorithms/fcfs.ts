@@ -1,8 +1,8 @@
 import { AlgorithmResultData, ChartData, TableData } from "../types";
 
-const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
+const fcfsAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
   // Sort the processes based on arrival time
-  
+
   const sortedTableData = [...tableData].sort(
     (a, b) => +a.arrivalTime - +b.arrivalTime
   );
@@ -17,12 +17,20 @@ const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
     chartData.push({
       start: 0,
       end: +sortedTableData[0].arrivalTime,
-      id: '-'
-    })
+      id: "-",
+    });
   }
 
   const fcfsResult = sortedTableData.map((process) => {
     if (currentTime < +process.arrivalTime) {
+      if (currentTime != 0) {
+        chartData.push({
+          start: currentTime,
+          end: +process.arrivalTime,
+          id: "-",
+        });
+      }
+
       currentTime = +process.arrivalTime;
     }
 
@@ -34,7 +42,7 @@ const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
       start: currentTime,
       end: endTime,
       id: process.id,
-    })
+    });
 
     totalTurnaroundTime += turnaroundTime;
     totalWaitingTime += waitingTime;
@@ -55,11 +63,11 @@ const fcfsAlgorithm = (tableData:TableData[]): AlgorithmResultData =>  {
   return {
     algorithmResult: fcfsResult,
     averageTime: {
-        turnaroundTime: averageTurnaroundTime,
-        waitingTime: averageWaitingTime,
+      turnaroundTime: averageTurnaroundTime,
+      waitingTime: averageWaitingTime,
     },
     ganttChartData: chartData,
-  }
+  };
 };
 
 export default fcfsAlgorithm;

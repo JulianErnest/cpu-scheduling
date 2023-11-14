@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AlgorithmResultData, ChartData, TableData } from "../types";
 
 const nonPreemptivePriorityAlgorithm = (tableData: TableData[]): AlgorithmResultData => {

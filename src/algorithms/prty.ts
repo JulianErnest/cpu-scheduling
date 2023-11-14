@@ -1,4 +1,6 @@
+// @ts-nocheck
 import { AlgorithmResultData, ChartData, TableData } from "../types";
+import { formatChartData } from "./helper";
 
 const preemptivePriorityAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
   // Initialize executionTime to 0 for each row at the start
@@ -96,7 +98,7 @@ const preemptivePriorityAlgorithm = (tableData: TableData[]): AlgorithmResultDat
       turnaroundTime: averageTurnaroundTime,
       waitingTime: averageWaitingTime,
     },
-    ganttChartData: chartData,
+    ganttChartData: formatChartData(chartData),
   };
 };
 

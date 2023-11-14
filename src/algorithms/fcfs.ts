@@ -11,8 +11,6 @@ const fcfsAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
 
   let currentTime = 0;
   let endTime = 0;
-  let totalTurnaroundTime = 0;
-  let totalWaitingTime = 0;
 
   if (currentTime !== +sortedTableData[0].arrivalTime) {
     chartData.push({
@@ -45,9 +43,6 @@ const fcfsAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
       id: process.id,
     });
 
-    totalTurnaroundTime += turnaroundTime;
-    totalWaitingTime += waitingTime;
-
     currentTime = endTime;
 
     return {
@@ -58,14 +53,11 @@ const fcfsAlgorithm = (tableData: TableData[]): AlgorithmResultData => {
     };
   });
 
-  const averageTurnaroundTime = totalTurnaroundTime / tableData.length;
-  const averageWaitingTime = totalWaitingTime / tableData.length;
-
   return {
     algorithmResult: fcfsResult,
     averageTime: {
-      turnaroundTime: averageTurnaroundTime,
-      waitingTime: averageWaitingTime,
+        turnaroundTime: fcfsResult.reduce((acc, curr) => acc + curr.turnaroundTime, 0) / fcfsResult.length,
+        waitingTime: fcfsResult.reduce((acc, curr) => acc + curr.waitingTime, 0) / fcfsResult.length,
     },
     ganttChartData: chartData,
   };

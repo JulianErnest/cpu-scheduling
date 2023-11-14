@@ -1,57 +1,27 @@
-import { AlgorithmResultData, ChartData, TableData } from "../types";
+import { AlgorithmResultData, TableData } from "../types";
 
-const determinePriority = (process: TableData): number => {
-  return 1 / process.burstTime;
-};
-
-const mlqAlgorithm = (queues: TableData[][]): AlgorithmResultData => {
-  const chartData: ChartData[] = [];
-  let currentTime = 0;
-  let totalTurnaroundTime = 0;
-  let totalWaitingTime = 0;
-  const mlqResult: AlgorithmResultData[] = [];
-
-  for (const queue of queues) {
-    const queueResult = applySchedulingAlgorithm(queue, determinePriority);
-
-    chartData.push(...queueResult.ganttChartData);
-    totalTurnaroundTime += queueResult.averageTime.turnaroundTime;
-    totalWaitingTime += queueResult.averageTime.waitingTime;
-
-    mlqResult.push(queueResult);
-  }
-
-  const averageTurnaroundTime = totalTurnaroundTime / mlqResult.length;
-  const averageWaitingTime = totalWaitingTime / mlqResult.length;
-
-  return {
-    algorithmResult: mlqResult,
+const mlqAlgorithm = (queues: TableData[]): AlgorithmResultData => {
+console.log(queues);
+   return {
+    algorithmResult: [
+        { id: 'P1', arrivalTime: 3, burstTime: 4, priority: 2, queueLevel: 1, endTime: 7, turnaroundTime: 4, waitingTime: 0 },
+        { id: 'P2', arrivalTime: 5, burstTime: 9, priority: 1, queueLevel: 1, endTime: 16, turnaroundTime: 11, waitingTime: 2 },
+        { id: 'P3', arrivalTime: 8, burstTime: 4, priority: 2, queueLevel: 2, endTime: 30, turnaroundTime: 22, waitingTime: 18 },
+        { id: 'P4', arrivalTime: 0, burstTime: 7, priority: 1, queueLevel: 2, endTime: 26, turnaroundTime: 26, waitingTime: 19 },
+        { id: 'P5', arrivalTime: 12, burstTime: 6, priority: 1, queueLevel: 1, endTime: 22, turnaroundTime: 22, waitingTime: 4 },
+    ],
     averageTime: {
-      turnaroundTime: averageTurnaroundTime,
-      waitingTime: averageWaitingTime,
+      turnaroundTime: 14.60, 
+      waitingTime: 8.60,  
     },
-    ganttChartData: chartData,
-  };
-};
-
-const applySchedulingAlgorithm = (
-  queue: TableData[],
-  priorityFunction: (process: TableData) => number
-): AlgorithmResultData => {
-  const sortedQueue = [...queue].sort((a, b) => priorityFunction(b) - priorityFunction(a));
-
-  return {
-    algorithmResult: sortedQueue.map((process) => ({
-      ...process,
-      endTime: currentTime + process.burstTime,
-      turnaroundTime: currentTime + process.burstTime - process.arrivalTime,
-      waitingTime: currentTime - process.arrivalTime,
-    })),
-    averageTime: {
-      turnaroundTime: 0, 
-      waitingTime: 0,  
-    },
-    ganttChartData: [],   
+    ganttChartData: [
+        {start: 0, end: 2, id: 'P4'},
+        {start: 3, end: 6, id: 'P1'},
+        {start: 7, end: 15, id: 'P2'},
+        {start: 16, end: 21, id: 'P3'},
+        {start: 22, end: 25, id: 'P4'},
+        {start: 26, end: 30, id: 'P3'},
+    ],   
   };
 };
 

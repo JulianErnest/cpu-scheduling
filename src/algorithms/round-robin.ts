@@ -1,9 +1,7 @@
 // @ts-nocheck
 import { AlgorithmResult, AlgorithmResultData, ChartData, TableData } from "../types";
-import { deepCopy} from "./helper";
 
 const roundRobinAlgorithm = (tableData: TableData[], timeQuantum: number): AlgorithmResultData => {
-    console.log(tableData)
     /*
     1. Sort tablleData by arrival time 
     2. Create readyQueue
@@ -12,8 +10,7 @@ const roundRobinAlgorithm = (tableData: TableData[], timeQuantum: number): Algor
     5. 
     */
     // Clone tableData
-    const cloneTableData = deepCopy(tableData) as TableData[];
-    cloneTableData.sort((a, b) => +a.arrivalTime - +b.arrivalTime);
+    const cloneTableData = tableData.sort((a, b) => +a.arrivalTime - +b.arrivalTime || (a.burstTime - b.burstTime));
     console.log(cloneTableData);
     let currentTime = +cloneTableData[0].arrivalTime; 
     const readyQueue: TableData[] = [];

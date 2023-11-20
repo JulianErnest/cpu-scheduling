@@ -8,12 +8,7 @@ import {
 import { deepCopy, formatChartData} from "./helper";
 
 const srtf = (tableData: TableData[]): AlgorithmResultData => {
-  tableData.sort((a, b) => +a.arrivalTime - +b.arrivalTime || (a.burstTime - b.burstTime));
-  const cloneTableData = deepCopy(tableData) as TableData[];
-  console.log(cloneTableData);
-  cloneTableData.sort((a, b) => +a.arrivalTime - +b.arrivalTime || (a.burstTime - b.burstTime));
-  console.log(cloneTableData);
-
+  const cloneTableData = tableData.sort((a, b) => +a.arrivalTime - +b.arrivalTime || (a.burstTime - b.burstTime));
   let currentTime = +cloneTableData[0].arrivalTime;
 
   const queue: TableData[] = [];
